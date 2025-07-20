@@ -97,7 +97,6 @@ jobs:
           container-runtime: containerd
           cpus: 8
           insecure-registry: "localhost:5000"
-          install-path: ${{ github.workspace }}/${{ matrix.test-name }}
           memory: 16384MB
           start-args: "--force"
 
