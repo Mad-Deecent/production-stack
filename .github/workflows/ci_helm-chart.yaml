@@ -95,10 +95,11 @@ jobs:
           addons: registry
           cache: true
           container-runtime: containerd
-          cpus: 4
+          cpus: 8
           driver: docker
           insecure-registry: "localhost:5000"
-          memory: 15995MB
+          memory: 16384MB
+          start-args: "--force"
 
       - name: Setup Python
         id: setup-python
