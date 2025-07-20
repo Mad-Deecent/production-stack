@@ -104,10 +104,10 @@ jobs:
           addons: registry,nvidia-driver-installer,nvidia-gpu-device-plugin
           cache: true
           container-runtime: docker
-          cpus: 8
+          cpus: 6
           driver: docker
           insecure-registry: "localhost:5000"
-          memory: 32768
+          memory: 16384
           wait: false
           start-args: "--gpus=all"
 
