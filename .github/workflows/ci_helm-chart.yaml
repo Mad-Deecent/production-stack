@@ -92,13 +92,12 @@ jobs:
       - name: Setup Minikube
         uses: medyagh/setup-minikube@latest
         with:
-          addons: registry, nvidia-driver-installer, nvidia-gpu-device-plugin
+          addons: registry,nvidia-driver-installer,nvidia-gpu-device-plugin
           cache: true
           container-runtime: containerd
           cpus: 8
-          driver: docker
           insecure-registry: "localhost:5000"
-          install-path: ${{ matrix.test-name }}/bin
+          install-path: ${{ github.workspace }}/${{ matrix.test-name }}
           memory: 16384MB
           start-args: "--force"
 
