@@ -93,6 +93,46 @@ jobs:
       - name: Docker Setup
         uses: docker/setup-buildx-action@v3
 
+        - name: Check Available Resources
+        run: |
+          echo "=== System Resources ==="
+          echo "CPUs available: $(nproc)"
+          echo "Memory available: $(free -h)"
+          echo "Docker info:"
+          docker info | grep -E "(CPUs|Total Memory)" || true
+          echo "Container limits:"
+          cat /sys/fs/cgroup/memory/memory.limit_in_bytes 2>/dev/null || echo "No memory cgroup limit"
+          cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us 2>/dev/null || echo "No CPU cgroup quota"
+
+      - name: Clean Previous Minikube State
+        run: |
+          echo "=== Cleaning any previous minikube state ==="
+          
+          # Stop and delete any existing minikube
+          minikube stop || true
+          minikube delete || true
+          
+          # Clean up any leftover containers
+          docker ps -a | grep -E "(minikube|k8s)" | awk '{print $1}' | xargs -r docker rm -f || true
+          
+          # Clean up any leftover volumes
+          docker volume ls | grep minikube | awk '{print $2}' | xargs -r docker volume rm || true
+          
+          # Clean up docker system
+          docker system prune -f || true
+          
+          echo "Previous state cleaned"
+
+      - name: Debug Minikube Resource Detection
+        run: |
+          echo "=== Debugging minikube resource detection ==="
+          echo "nproc reports: $(nproc)"
+          echo "Docker info reports:"
+          docker info | grep -i cpu || true
+          
+          # Try to see what minikube detects without starting
+          echo "Testing minikube resource detection..."
+
       - name: Setup Minikube
         uses: medyagh/setup-minikube@latest
         with:
