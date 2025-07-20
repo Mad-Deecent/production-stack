@@ -66,7 +66,7 @@ jobs:
   test:
     name: Test
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, gpu]
     ## Setup matrix for tests - single test at a time
     ## Primary benefit here is to easily define tests using a consistent pattern
     ## with later opportunities to run in parallel if self-hosted runner hardware allows
@@ -107,20 +107,20 @@ jobs:
       - name: Clean Previous Minikube State
         run: |
           echo "=== Cleaning any previous minikube state ==="
-          
+
           # Stop and delete any existing minikube
           minikube stop || true
           minikube delete || true
-          
+
           # Clean up any leftover containers
           docker ps -a | grep -E "(minikube|k8s)" | awk '{print $1}' | xargs -r docker rm -f || true
-          
+
           # Clean up any leftover volumes
           docker volume ls | grep minikube | awk '{print $2}' | xargs -r docker volume rm || true
-          
+
           # Clean up docker system
           docker system prune -f || true
-          
+
           echo "Previous state cleaned"
 
       - name: Debug Minikube Resource Detection
@@ -129,7 +129,7 @@ jobs:
           echo "nproc reports: $(nproc)"
           echo "Docker info reports:"
           docker info | grep -i cpu || true
-          
+
           # Try to see what minikube detects without starting
           echo "Testing minikube resource detection..."
 
