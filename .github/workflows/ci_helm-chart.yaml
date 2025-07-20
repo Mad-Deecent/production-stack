@@ -18,7 +18,7 @@ on:
 
 jobs:
   setup:
-    name: Build Docker Image
+    name: Setup Minikube
     runs-on: [self-hosted, gpu]
     steps:
       - name: Checkout Repository
@@ -61,7 +61,6 @@ jobs:
 
       - name: Load Image
         run: |
-          docker load < image.tar
           minikube image load localhost:5000/git-act-router
 
   test:
