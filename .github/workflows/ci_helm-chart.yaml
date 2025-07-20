@@ -50,6 +50,8 @@ jobs:
         with:
           context: .
           build-args: INSTALL_OPTIONAL_DEP=default
+          cache-from: type=gha,mode=max
+          cache-to: type=gha,mode=max
           file: docker/Dockerfile
           push: false
           tags: localhost:5000/git-act-router
@@ -107,6 +109,8 @@ jobs:
 
       - name: Install Dependencies
         run: |
+
+          uv venv llmstack
           uv pip install --upgrade pip
           uv pip install --upgrade --no-cache-dir pip setuptools_scm && \
           uv pip install -r requirements-tests.txt
