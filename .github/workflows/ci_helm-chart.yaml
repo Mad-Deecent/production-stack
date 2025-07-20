@@ -66,9 +66,7 @@ jobs:
   test:
     name: Test
     needs: build
-    runs-on:
-      group: gpu
-
+    runs-on: ubuntu-latest
     ## Setup matrix for tests
     strategy:
       matrix:
@@ -78,6 +76,7 @@ jobs:
           - two-pods-minimal-example
           - multiple-models
       fail-fast: false
+      max-parallel: 1
 
     steps:
       ## Setup environment
@@ -92,14 +91,13 @@ jobs:
       - name: Setup Minikube
         uses: medyagh/setup-minikube@latest
         with:
-          addons: registry, nvidia-driver-installer, nvidia-gpu-device-plugin
+          addons: registry
           cache: true
           container-runtime: containerd
-          # cpus:
+          # cpus: 8
           driver: none
           insecure-registry: "localhost:5000"
-          # memory: 16384MB
-          start-args: "--force"
+          # memory: 16384
 
       - name: Setup Python
         id: setup-python
@@ -107,12 +105,6 @@ jobs:
         with:
           python-version: "3.12"
           cache: "pip"
-
-      - name: Setup Conda
-        uses: mamba-org/setup-micromamba@v2
-
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v5
 
       - name: Install Dependencies
         run: |
