@@ -111,6 +111,7 @@ jobs:
         run: |
 
           uv venv llmstack
+          source llmstack/bin/activate
           uv pip install --upgrade pip
           uv pip install --upgrade --no-cache-dir pip setuptools_scm && \
           uv pip install -r requirements-tests.txt
