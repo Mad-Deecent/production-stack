@@ -18,6 +18,7 @@ on:
 
 jobs:
   build:
+    name: Build Docker Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -42,8 +43,6 @@ jobs:
         with:
           context: .
           build-args: INSTALL_OPTIONAL_DEP=default
-          cache-from: type=gha,mode=max
-          cache-to: type=gha,mode=max
           file: docker/Dockerfile
           push: false
           tags: localhost:5000/git-act-router
@@ -56,7 +55,8 @@ jobs:
           name: docker-image
           path: image.tar
 
-  tests:
+  test:
+    name: Test
     needs: build
     runs-on: ubuntu-latest
     ## Setup matrix for tests
@@ -78,20 +78,12 @@ jobs:
       - name: Helm Setup
         uses: azure/setup-helm@v4.3.0
 
-      # - name: Kubectl Setup
-      #   uses: azure/setup-kubectl@v4
-
-      # - name: Set Kube Context
-      #   run: |
-      #     kubectl config use-context minikube
-
       - name: Setup Minikube
         uses: medyagh/setup-minikube@latest
         with:
           cache: true
           driver: docker
           container-runtime: containerd
-          addons: registry,ingress
 
       - name: Download Image
         uses: actions/download-artifact@v4
@@ -106,7 +98,7 @@ jobs:
       ## Install Helm Chart
       - name: Install Helm Chart
         run: |
-          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --wait --timeout 2m
+          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml
 
       ## Validate
       - name: Validate
@@ -119,6 +111,7 @@ jobs:
           echo "# Test Summary - ${{ matrix.test-name }}" >> $GITHUB_STEP_SUMMARY
 
   lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
