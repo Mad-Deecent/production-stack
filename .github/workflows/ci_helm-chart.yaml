@@ -29,22 +29,6 @@ jobs:
       - name: Docker Setup
         uses: docker/setup-buildx-action@v3
 
-        ## Looks like we're trying to mount
-        ## pip cache in Dockerfile, so setup python
-        ## to use cache from GHA
-      # - name: Setup Python
-      #   id: setup-python
-      #   uses: actions/setup-python@v5
-      #   with:
-      #     python-version: "3.12"
-      #     cache: "pip"
-
-      # - name: Install Dependencies
-      #   run: |
-      #     pip install --upgrade pip
-      #     pip install --upgrade --no-cache-dir pip setuptools_scm && \
-      #     pip install --no-cache-dir .[semantic_cache,lmcache]
-
       - name: Docker Build
         uses: docker/build-push-action@v6
         with:
@@ -64,20 +48,9 @@ jobs:
           path: image.tar
 
   test:
-    name: Test
+    name: Test Helm Charts
     needs: build
-    runs-on:
-      group: gpu
-
-    ## Setup matrix for tests
-    strategy:
-      matrix:
-        ## Test names - mapped to tests/helm/<test-name>
-        test-name:
-          - secure-minimal-example
-          - two-pods-minimal-example
-          - multiple-models
-      fail-fast: false
+    runs-on: [self-hosted, gpu]
 
     steps:
       ## Setup environment
@@ -128,22 +101,67 @@ jobs:
           docker load < image.tar
           minikube image load localhost:5000/git-act-router
 
-      ## Install Helm Chart
-      - name: Install Helm Chart
+      ## Test 1: secure-minimal-example
+      - name: Test secure-minimal-example
         run: |
-          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --debug --wait
-
-      ## Validate
-      - name: Validate
+          echo "Testing secure-minimal-example..."
+          helm upgrade --install vllm-secure ./helm -f tests/helm/secure-minimal-example/values.yaml --debug --wait
+          
+      - name: Validate secure-minimal-example
         timeout-minutes: 3
         run: |
-          mkdir -p output-tests/helm/${{ matrix.test-name }}
-          bash tests/scripts/port-forward.sh tests/helm/${{ matrix.test-name }}/test
+          mkdir -p output-tests/helm/secure-minimal-example
+          bash tests/scripts/port-forward.sh tests/helm/secure-minimal-example/test
 
-      ## Test Results
-      - name: Test Results
+      - name: Cleanup secure-minimal-example
+        if: always()
         run: |
-          echo "# Test Summary - ${{ matrix.test-name }}" >> $GITHUB_STEP_SUMMARY
+          helm uninstall vllm-secure || true
+          kubectl delete pods --all || true
+
+      ## Test 2: two-pods-minimal-example  
+      - name: Test two-pods-minimal-example
+        run: |
+          echo "Testing two-pods-minimal-example..."
+          helm upgrade --install vllm-twopods ./helm -f tests/helm/two-pods-minimal-example/values.yaml --debug --wait
+
+      - name: Validate two-pods-minimal-example
+        timeout-minutes: 3
+        run: |
+          mkdir -p output-tests/helm/two-pods-minimal-example
+          bash tests/scripts/port-forward.sh tests/helm/two-pods-minimal-example/test
+
+      - name: Cleanup two-pods-minimal-example
+        if: always()
+        run: |
+          helm uninstall vllm-twopods || true
+          kubectl delete pods --all || true
+
+      ## Test 3: multiple-models
+      - name: Test multiple-models
+        run: |
+          echo "Testing multiple-models..."
+          helm upgrade --install vllm-multimodel ./helm -f tests/helm/multiple-models/values.yaml --debug --wait
+
+      - name: Validate multiple-models
+        timeout-minutes: 3
+        run: |
+          mkdir -p output-tests/helm/multiple-models
+          bash tests/scripts/port-forward.sh tests/helm/multiple-models/test
+
+      - name: Cleanup multiple-models
+        if: always()
+        run: |
+          helm uninstall vllm-multimodel || true
+          kubectl delete pods --all || true
+
+      ## Test Results Summary
+      - name: Test Results Summary
+        run: |
+          echo "# Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "✅ secure-minimal-example - Completed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ two-pods-minimal-example - Completed" >> $GITHUB_STEP_SUMMARY  
+          echo "✅ multiple-models - Completed" >> $GITHUB_STEP_SUMMARY
 
   lint:
     name: Lint
@@ -160,19 +178,3 @@ jobs:
       - name: Lint Helm Chart
         run: |
           helm lint helm/.
-
-  ## (Optional) Job to enforce required check for branch protection rules
-  ## Check name = "ci-helm-check"
-  ## Will require this workflow to pass before merging
-  # ci-helm-check:
-  #   runs-on: ubuntu-latest
-  #   needs: [tests, lint]
-  #   steps:
-  #     - run: |
-  #         if ${{ needs.tests.outcome }} != "success"; then
-  #           echo "Tests failed"
-  #           exit 1
-  #         else
-  #           echo "Tests passed"
-  #           exit 0
-  #         fi
