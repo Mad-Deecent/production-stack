@@ -67,6 +67,7 @@ jobs:
     name: Test
     needs: build
     runs-on: ubuntu-latest
+
     ## Setup matrix for tests
     strategy:
       matrix:
@@ -90,10 +91,12 @@ jobs:
       - name: Setup Minikube
         uses: medyagh/setup-minikube@latest
         with:
+          addons: registry
           cache: true
-          driver: docker
           container-runtime: containerd
           cpus: 8
+          driver: docker
+          insecure-registry: "localhost:5000"
           memory: 16384
 
       - name: Setup Python
@@ -112,7 +115,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install --upgrade pip
-          pip install openai 
+          pip install openai
 
       - name: Download Image
         uses: actions/download-artifact@v4
