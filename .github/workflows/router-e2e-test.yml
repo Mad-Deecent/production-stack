@@ -5,16 +5,16 @@ on:
     branches:
       - main
     paths:
-      - 'src/vllm_router/**'
-      - 'docker/**'
-      - 'pyproject.toml'
-      - '.github/**'
+      - "src/vllm_router/**"
+      - "docker/**"
+      - "pyproject.toml"
+      - ".github/**"
   pull_request:
     paths:
-      - 'src/vllm_router/**'
-      - 'docker/**'
-      - 'pyproject.toml'
-      - '.github/**'
+      - "src/vllm_router/**"
+      - "docker/**"
+      - "pyproject.toml"
+      - ".github/**"
   workflow_dispatch:
 
 jobs:
@@ -31,22 +31,19 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Python
+        id: setup-python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: pip
+          cache: "pip"
 
       - name: Install dependencies
+        if: steps.setup-python.outputs.cache-hit == false
         run: |
           python -m pip install --upgrade pip
           pip install -r src/tests/requirements.txt
           pip install -r requirements-test.txt
           pip install -e .
-
-      - name: Make scripts executable
-        run: |
-          chmod +x src/vllm_router/perf-test.sh
-          chmod +x src/tests/perftest/*.sh
 
       - name: Start Mock OpenAI servers
         working-directory: src/tests/perftest
@@ -110,11 +107,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Python
+        id: setup-python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
       - name: Install Python dependencies
+        if: steps.setup-python.outputs.cache-hit == false
         run: |
           python -m pip install --upgrade pip
           pip install -r benchmarks/multi-round-qa/requirements.txt
@@ -192,8 +192,8 @@ jobs:
         run: |
           echo "🚀 Starting vLLM serve backend"
           mkdir -p "$LOG_DIR"
-          CUDA_VISIBLE_DEVICES=0 vllm serve facebook/opt-125m --port 8001 --gpu-memory-utilization 0.7 --chat-template .github/template-chatml.jinja > "$LOG_DIR/backend1.log" 2>&1 &
-          CUDA_VISIBLE_DEVICES=1 vllm serve facebook/opt-125m --port 8002 --gpu-memory-utilization 0.7 --chat-template .github/template-chatml.jinja > "$LOG_DIR/backend2.log" 2>&1 &
+          CUDA_VISIBLE_DEVICES=0 vllm serve facebook/opt-125m --port 8001 --gpu-memory-utilization 0.7 --chat-template tests/assets/templates/template-chatml.jinja > "$LOG_DIR/backend1.log" 2>&1 &
+          CUDA_VISIBLE_DEVICES=1 vllm serve facebook/opt-125m --port 8002 --gpu-memory-utilization 0.7 --chat-template tests/assets/templates/template-chatml.jinja > "$LOG_DIR/backend2.log" 2>&1 &
 
       - name: Wait for backends to be ready
         run: |

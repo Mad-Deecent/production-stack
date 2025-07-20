@@ -263,11 +263,11 @@ run_all_tests() {
 
     # Define all available test types and their configurations
     local test_configs=(
-        "roundrobin:roundrobin:.github/values-08-roundrobin-routing.yaml"
-        "prefixaware:prefixaware:.github/values-07-prefix-routing.yaml"
-        "kvaware:kvaware:.github/values-09-kvaware-routing.yaml"
-        "session:session:.github/values-06-session-routing.yaml"
-        "disaggregated-prefill:disaggregated_prefill:.github/values-10-disagg-prefill.yaml"
+        "roundrobin:roundrobin:tests/assets/helm/values-08-roundrobin-routing.yaml"
+        "prefixaware:prefixaware:tests/assets/helm/values-07-prefix-routing.yaml"
+        "kvaware:kvaware:tests/assets/helm/values-09-kvaware-routing.yaml"
+        "session:session:tests/assets/helm/values-06-session-routing.yaml"
+        "disaggregated-prefill:disaggregated_prefill:tests/assets/helm/values-10-disagg-prefill.yaml"
     )
 
     local failed_tests=()
@@ -387,23 +387,23 @@ else
     # Validate test type and set configuration for single test
     case $TEST_TYPE in
         "roundrobin")
-            HELM_VALUES_FILE=".github/values-08-roundrobin-routing.yaml"
+            HELM_VALUES_FILE="tests/assets/helm/values-08-roundrobin-routing.yaml"
             ROUTING_LOGIC="roundrobin"
             ;;
         "prefixaware")
-            HELM_VALUES_FILE=".github/values-07-prefix-routing.yaml"
+            HELM_VALUES_FILE="tests/assets/helm/values-07-prefix-routing.yaml"
             ROUTING_LOGIC="prefixaware"
             ;;
         "kvaware")
-            HELM_VALUES_FILE=".github/values-09-kvaware-routing.yaml"
+            HELM_VALUES_FILE="tests/assets/helm/values-09-kvaware-routing.yaml"
             ROUTING_LOGIC="kvaware"
             ;;
         "disaggregated-prefill")
-            HELM_VALUES_FILE=".github/values-10-disagg-prefill.yaml"
+            HELM_VALUES_FILE="tests/assets/helm/values-10-disagg-prefill.yaml"
             ROUTING_LOGIC="disaggregated_prefill"
             ;;
         "session")
-            HELM_VALUES_FILE=".github/values-06-session-routing.yaml"
+            HELM_VALUES_FILE="tests/assets/helm/values-06-session-routing.yaml"
             ROUTING_LOGIC="session"
             ;;
         *)
