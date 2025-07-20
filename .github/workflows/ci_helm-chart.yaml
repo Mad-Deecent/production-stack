@@ -103,7 +103,7 @@ jobs:
         with:
           addons: registry,nvidia-driver-installer,nvidia-gpu-device-plugin
           cache: true
-          container-runtime: containerd
+          container-runtime: docker
           cpus: 8
           driver: docker
           insecure-registry: "localhost:5000"
@@ -137,7 +137,7 @@ jobs:
       - name: Install Helm Chart
         run: |
           helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --debug --namespace ${{ matrix.test-name }}
-  
+
       ## Validate
       - name: Validate
         timeout-minutes: 3
