@@ -94,7 +94,7 @@ jobs:
           addons: registry
           cache: true
           container-runtime: containerd
-          cpus: 8
+          cpus: 4
           driver: docker
           insecure-registry: "localhost:5000"
           memory: 16384
