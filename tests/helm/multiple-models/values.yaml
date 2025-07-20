@@ -19,7 +19,7 @@ servingEngineSpec:
       modelURL: "HuggingFaceTB/SmolLM2-135M-Instruct"
       replicaCount: 1
       requestCPU: 2
-      requestMemory: "16Gi"
+      requestMemory: "8Gi"
       # requestGPU: 1
       pvcStorage: "10Gi"
       pvcAccessMode:

@@ -10,8 +10,8 @@ servingEngineSpec:
       replicaCount: 1
 
       requestCPU: 4
-      requestMemory: "16Gi"
-      requestGPU: 1
+      requestMemory: "8Gi"
+      #requestGPU: 1
 
 routerSpec:
   repository: "localhost:5000/git-act-router"

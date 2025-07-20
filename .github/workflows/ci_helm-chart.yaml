@@ -97,7 +97,7 @@ jobs:
           cpus: 4
           driver: docker
           insecure-registry: "localhost:5000"
-          memory: 16384
+          memory: 15995MB
 
       - name: Setup Python
         id: setup-python
