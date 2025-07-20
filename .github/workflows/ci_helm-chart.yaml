@@ -18,7 +18,7 @@ on:
 
 jobs:
   setup:
-    name: Setup Minikube
+    name: Setup
     runs-on: [self-hosted, gpu]
     steps:
       - name: Checkout Repository
@@ -44,6 +44,14 @@ jobs:
         run: |
           minikube image load localhost:5000/git-act-router
 
+      - name: Pre-Clean
+        run: |
+          # Or if you want to see what you're deleting
+          for ns in $(kubectl get namespaces -o name | grep -v "kube-\|default"); do
+            echo "Deleting $ns"
+          kubectl delete $ns || true
+          done
+
   test:
     name: Test
     needs: setup
@@ -59,7 +67,7 @@ jobs:
           - two-pods-minimal-example
           - multiple-models
       fail-fast: true
-      max-parallel: 1
+      max-parallel: 2
 
     steps:
       ## Setup environment
@@ -86,7 +94,7 @@ jobs:
       ## Install Helm Chart
       - name: Install Helm Chart
         run: |
-          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --atomic --debug --create-namespace -n ${{ matrix.test-name }}
+          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --create-namespace -n ${{ matrix.test-name }}
 
       ## Validate
       - name: Validate
