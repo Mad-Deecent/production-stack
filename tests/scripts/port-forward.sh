@@ -9,6 +9,8 @@ chmod -R 777 "output-$VAR"
 
 # Print router logs
 POD_NAME=$(kubectl get pods --no-headers -o custom-columns=":metadata.name" | grep '^vllm-deployment-router')
+echo "Getting pod $POD_NAME"
+
 kubectl wait --for=condition=ready pod/"$POD_NAME" --timeout=120s
 kubectl logs -f "$POD_NAME" 2>&1 | tee "output-$VAR/router.log" &
 

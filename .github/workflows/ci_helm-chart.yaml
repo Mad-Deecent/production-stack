@@ -32,18 +32,18 @@ jobs:
         ## Looks like we're trying to mount
         ## pip cache in Dockerfile, so setup python
         ## to use cache from GHA
-      - name: Setup Python
-        id: setup-python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: "pip"
+      # - name: Setup Python
+      #   id: setup-python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: "3.12"
+      #     cache: "pip"
 
-      - name: Install Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install --upgrade --no-cache-dir pip setuptools_scm && \
-          pip install --no-cache-dir .[semantic_cache,lmcache]
+      # - name: Install Dependencies
+      #   run: |
+      #     pip install --upgrade pip
+      #     pip install --upgrade --no-cache-dir pip setuptools_scm && \
+      #     pip install --no-cache-dir .[semantic_cache,lmcache]
 
       - name: Docker Build
         uses: docker/build-push-action@v6
@@ -93,6 +93,8 @@ jobs:
           cache: true
           driver: docker
           container-runtime: containerd
+          cpus: 8
+          memory: 16384
 
       - name: Setup Python
         id: setup-python
@@ -109,12 +111,8 @@ jobs:
 
       - name: Install Dependencies
         run: |
-
-          uv venv llmstack
-          source llmstack/bin/activate
-          uv pip install --upgrade pip
-          uv pip install --upgrade --no-cache-dir pip setuptools_scm && \
-          uv pip install -r requirements-test.txt
+          pip install --upgrade pip
+          pip install openai 
 
       - name: Download Image
         uses: actions/download-artifact@v4
