@@ -110,6 +110,10 @@ jobs:
         run: |
           echo "# Test Summary - ${{ matrix.test-name }}" >> $GITHUB_STEP_SUMMARY
 
+      - name: Uninstall Helm Chart
+        run: |
+          helm uninstall vllm-${{ matrix.test-name }} -n ${{ matrix.test-name }}
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
