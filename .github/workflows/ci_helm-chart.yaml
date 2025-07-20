@@ -67,6 +67,7 @@ jobs:
           - secure-minimal-example
           - two-pods-minimal-example
           - multiple-models
+      fail-fast: false
 
     steps:
       ## Setup environment
@@ -102,7 +103,9 @@ jobs:
 
       ## Validate
       - name: Validate
+        timeout-minutes: 3
         run: |
+          mkdir -p output-tests/helm/${{ matrix.test-name }}
           bash tests/scripts/port-forward.sh tests/helm/${{ matrix.test-name }}/test.sh
 
       ## Test Results
