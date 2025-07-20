@@ -37,6 +37,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install --upgrade --no-cache-dir pip setuptools_scm && \
+          pip install --no-cache-dir .[semantic_cache,lmcache]
 
       - name: Docker Build
         uses: docker/build-push-action@v6
@@ -85,6 +92,25 @@ jobs:
           driver: docker
           container-runtime: containerd
 
+      - name: Setup Python
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Setup Conda
+        uses: mamba-org/setup-micromamba@v2
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install Dependencies
+        run: |
+          uv pip install --upgrade pip
+          uv pip install --upgrade --no-cache-dir pip setuptools_scm && \
+          uv pip install -r requirements-tests.txt
+
       - name: Download Image
         uses: actions/download-artifact@v4
         with:
@@ -105,7 +131,7 @@ jobs:
         timeout-minutes: 3
         run: |
           mkdir -p output-tests/helm/${{ matrix.test-name }}
-          bash tests/scripts/port-forward.sh tests/helm/${{ matrix.test-name }}/test.sh
+          bash tests/scripts/port-forward.sh tests/helm/${{ matrix.test-name }}/test
 
       ## Test Results
       - name: Test Results

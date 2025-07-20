@@ -1,5 +1,6 @@
 #!/bin/bash
-
+HOST=$1
+PORT=$2
 # Send a request to fetch the available models and save the response to a file
 result_model=$(curl -s http://"$1":"$2"/v1/models | tee test-two-pods-minimal-example.json)
 
