@@ -136,8 +136,8 @@ jobs:
       ## Install Helm Chart
       - name: Install Helm Chart
         run: |
-          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --debug --wait --namespace ${{ matrix.test-name }}
-
+          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --debug --namespace ${{ matrix.test-name }}
+  
       ## Validate
       - name: Validate
         timeout-minutes: 3
