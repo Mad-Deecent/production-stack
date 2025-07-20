@@ -78,14 +78,14 @@ jobs:
       - name: Helm Setup
         uses: azure/setup-helm@v4.3.0
 
-      - name: Kubectl Setup
-        uses: azure/setup-kubectl@v4
+      # - name: Kubectl Setup
+      #   uses: azure/setup-kubectl@v4
 
-      - name: Set Kube Context
-        run: |
-          kubectl config use-context minikube
+      # - name: Set Kube Context
+      #   run: |
+      #     kubectl config use-context minikube
 
-      - name: Start Minikube
+      - name: Setup Minikube
         uses: medyagh/setup-minikube@latest
         with:
           cache: true
