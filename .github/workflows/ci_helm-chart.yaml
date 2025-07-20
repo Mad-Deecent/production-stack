@@ -96,6 +96,8 @@ jobs:
       - name: Setup Kubectl
         uses: azure/setup-kubectl@v4
 
+      ## If you have minikube running on the host, comment this out
+      ## and increase the parallelization of tests above
       - name: Setup Minikube
         uses: medyagh/setup-minikube@latest
         with:
@@ -107,6 +109,7 @@ jobs:
           insecure-registry: "localhost:5000"
           memory: 32768
           wait: false
+          start-args: "--gpus=all"
 
       - name: Setup Python
         id: setup-python
@@ -133,14 +136,14 @@ jobs:
       ## Install Helm Chart
       - name: Install Helm Chart
         run: |
-          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --debug --wait
+          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --debug --wait --namespace ${{ matrix.test-name }}
 
       ## Validate
       - name: Validate
         timeout-minutes: 3
         run: |
           mkdir -p output-tests/helm/${{ matrix.test-name }}
-          bash tests/scripts/port-forward.sh tests/helm/${{ matrix.test-name }}/test
+          bash tests/scripts/port-forward.sh tests/helm/${{ matrix.test-name }}/test ${{ matrix.test-name }}
 
       ## Test Results
       - name: Test Results
