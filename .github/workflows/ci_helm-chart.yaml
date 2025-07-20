@@ -103,7 +103,7 @@ jobs:
       ## Validate
       - name: Validate
         run: |
-          bash tests/helm/${{ matrix.test-name }}/test.sh
+          bash tests/scripts/port-forward.sh tests/helm/${{ matrix.test-name }}/test.sh
 
       ## Test Results
       - name: Test Results
