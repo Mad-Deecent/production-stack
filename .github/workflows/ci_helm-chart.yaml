@@ -46,7 +46,6 @@ jobs:
           file: docker/Dockerfile
           push: false
           tags: localhost:5000/git-act-router
-          target: deploy
           outputs: type=docker,dest=image.tar
 
       - name: Upload Image
