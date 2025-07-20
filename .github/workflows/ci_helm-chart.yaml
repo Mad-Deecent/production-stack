@@ -46,7 +46,6 @@ jobs:
 
       - name: Pre-Clean
         run: |
-          # Or if you want to see what you're deleting
           for ns in $(kubectl get namespaces -o name | grep -v "kube-\|default"); do
             echo "Deleting $ns"
           kubectl delete $ns || true
