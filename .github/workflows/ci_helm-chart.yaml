@@ -130,7 +130,7 @@ jobs:
       ## Install Helm Chart
       - name: Install Helm Chart
         run: |
-          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml
+          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --debug --wait
 
       ## Validate
       - name: Validate
