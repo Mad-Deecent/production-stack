@@ -40,25 +40,6 @@ jobs:
           push: false
           tags: localhost:5000/git-act-router
 
-      - name: Setup Kubectl
-        uses: azure/setup-kubectl@v4
-
-      ## If you have minikube running on the host, comment this out
-      ## and increase the parallelization of tests above
-      - name: Setup Minikube
-        uses: medyagh/setup-minikube@latest
-        with:
-          # Not sure which nvidia one is required here
-          addons: registry,ingress,nvidia-driver-installer,nvidia-gpu-device-plugin
-          cache: true
-          container-runtime: docker
-          cpus: 16
-          driver: docker
-          insecure-registry: "localhost:5000"
-          memory: 32768
-          wait: false
-          start-args: "--gpus=all"
-
       - name: Load Image
         run: |
           minikube image load localhost:5000/git-act-router
