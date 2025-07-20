@@ -41,7 +41,6 @@ jobs:
       - name: Hydrate pip cache
         run: |
           pip install --upgrade pip
-          cd src/vllm_router
           pip install --upgrade --no-cache-dir pip setuptools_scm && \
           pip install --no-cache-dir .[semantic_cache,lmcache]
 
