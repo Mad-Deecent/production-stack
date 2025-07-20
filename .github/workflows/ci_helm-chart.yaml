@@ -96,7 +96,7 @@ jobs:
       ## Install Helm Chart
       - name: Install Helm Chart
         run: |
-          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --atomic --create-namespace -n ${{ matrix.test-name }}
+          helm upgrade --install vllm-${{ matrix.test-name }} ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --atomic --create-namespace -n ${{ matrix.test-name }}
 
       ## Validate
       - name: Validate
