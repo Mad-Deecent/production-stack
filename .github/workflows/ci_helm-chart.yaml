@@ -93,7 +93,7 @@ jobs:
       - name: Docker Setup
         uses: docker/setup-buildx-action@v3
 
-        - name: Check Available Resources
+      - name: Check Available Resources
         run: |
           echo "=== System Resources ==="
           echo "CPUs available: $(nproc)"
