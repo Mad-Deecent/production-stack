@@ -44,6 +44,9 @@ jobs:
         run: |
           minikube image load localhost:5000/git-act-router
 
+      - name: Setup Kubectl
+        uses: azure/setup-kubectl@v4
+
       - name: Pre-Clean
         run: |
           for ns in $(kubectl get namespaces -o name | grep -v "kube-\|default"); do
@@ -93,7 +96,7 @@ jobs:
       ## Install Helm Chart
       - name: Install Helm Chart
         run: |
-          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --create-namespace -n ${{ matrix.test-name }}
+          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --atomic --create-namespace -n ${{ matrix.test-name }}
 
       ## Validate
       - name: Validate
