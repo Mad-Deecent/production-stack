@@ -67,7 +67,9 @@ jobs:
     name: Test
     needs: build
     runs-on: ubuntu-latest
-    ## Setup matrix for tests
+    ## Setup matrix for tests - single test at a time
+    ## Primary benefit here is to easily define tests using a consistent pattern
+    ## with later opportunities to run in parallel if self-hosted runner hardware allows
     strategy:
       matrix:
         ## Test names - mapped to tests/helm/<test-name>
@@ -75,7 +77,7 @@ jobs:
           - secure-minimal-example
           - two-pods-minimal-example
           - multiple-models
-      fail-fast: false
+      fail-fast: true
       max-parallel: 1
 
     steps:
@@ -94,7 +96,7 @@ jobs:
       - name: Setup Minikube
         uses: medyagh/setup-minikube@latest
         with:
-          addons: registry
+          addons: registry,nvidia-driver-installer,nvidia-gpu-device-plugin
           cache: true
           container-runtime: containerd
           cpus: 8
