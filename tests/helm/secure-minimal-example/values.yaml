@@ -12,7 +12,10 @@ servingEngineSpec:
 
       requestCPU: 6
       requestMemory: "16Gi"
-      requestGPU: 1
+      requestGPU: 0
+      env:
+        - name: CUDA_VISIBLE_DEVICES
+          value: "-1"
 
 routerSpec:
   repository: "localhost:32000/git-act-router"
