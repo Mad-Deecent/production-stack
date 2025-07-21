@@ -3,7 +3,8 @@ servingEngineSpec:
   modelSpec:
     - name: "opt125m"
       repository: "vllm/vllm-openai"
-      tag: "latest"
+      # tag: "latest"
+      tag: "v0.5.5"
       modelURL: "facebook/opt-125m"
       replicaCount: 1
       requestCPU: 6
@@ -15,7 +16,8 @@ servingEngineSpec:
 
     - name: "smol135m"
       repository: "vllm/vllm-openai"
-      tag: "latest"
+      # tag: "latest"
+      tag: "v0.5.5"
       modelURL: "HuggingFaceTB/SmolLM2-135M-Instruct"
       replicaCount: 1
       requestCPU: 6
