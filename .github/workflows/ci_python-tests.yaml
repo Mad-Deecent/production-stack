@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths:
-      # - ".github/workflows/ci_python-tests.yml"
-      - "**.py"
+      - ".github/workflows/ci_python-tests.yaml"
+      - "*.py"
       - "pyproject.toml"
 
 concurrency:
