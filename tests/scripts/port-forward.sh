@@ -8,7 +8,7 @@ NAMESPACE=$2
 [ ! -d "output-$VAR" ] && mkdir "output-$VAR"
 chmod -R 777 "output-$VAR"
 
-# DEBUG: Show what pods actually exist
+
 echo "=== DEBUG: All pods in namespace $NAMESPACE ==="
 kubectl get pods -n "$NAMESPACE" -o wide
 echo "=== END DEBUG ==="
