@@ -20,14 +20,6 @@ while true; do
     # Get all pods containing "vllm" in their name and extract their STATUS column
     pod_status=$(kubectl get pods -n "$NAMESPACE" -o wide --no-headers | grep "vllm" | awk '{print $3}' | sort | uniq)
     pod_ready=$(kubectl get pods -n "$NAMESPACE" -o wide --no-headers | grep "vllm" | awk '{print $2}' | sort | uniq)
-
-    echo "=== DEBUG: Pod status ==="
-    echo "$pod_status"
-    echo "=== END DEBUG ==="
-
-    echo "=== DEBUG: Pod ready ==="
-    echo "$pod_ready"
-    echo "=== END DEBUG ==="
     # If the only unique status is "Running", break the loop and continue
     if [[ "$pod_status" == "Running" ]] && [[ "$pod_ready" == "1/1" ]]; then
         echo "All llmstack pods are now Ready and in Running state."
@@ -35,6 +27,9 @@ while true; do
     fi
 
     echo "Not all pods are ready yet. Checking again in 5 seconds..."
+    echo "=== DEBUG: All pods in namespace $NAMESPACE ==="
+    kubectl get pods -n "$NAMESPACE" -o wide
+    echo "=== END DEBUG ==="
     sleep 5
 done
 
