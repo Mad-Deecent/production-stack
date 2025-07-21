@@ -40,6 +40,7 @@ jobs:
           file: docker/Dockerfile
           push: false
           tags: localhost:32000/git-act-router
+          outputs: type=docker,dest=image.tar
 
       - name: Load Image
         run: |
