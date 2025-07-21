@@ -38,12 +38,12 @@ jobs:
           cache-from: type=gha,mode=max
           cache-to: type=gha,mode=max
           file: docker/Dockerfile
-          push: true
+          push: false
           tags: localhost:32000/git-act-router
 
-      # - name: Load Image
-      #   run: |
-      #     microk8s ctr image import image.tar
+      - name: Load Image
+        run: |
+          microk8s ctr image import image.tar
 
   test:
     name: Test
