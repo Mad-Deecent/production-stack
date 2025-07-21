@@ -8,11 +8,6 @@ NAMESPACE=$2
 [ ! -d "output-$VAR" ] && mkdir "output-$VAR"
 chmod -R 777 "output-$VAR"
 
-
-echo "=== DEBUG: All pods in namespace $NAMESPACE ==="
-kubectl get pods -n "$NAMESPACE" -o wide
-echo "=== END DEBUG ==="
-
 # Print router logs
 POD_NAME=$(kubectl get pods -n "$NAMESPACE" --no-headers -o custom-columns=":metadata.name" | grep 'router')
 echo "Getting pod $POD_NAME"
@@ -23,9 +18,16 @@ kubectl logs -f "$POD_NAME" -n "$NAMESPACE" 2>&1 | tee "output-$VAR/router.log" 
 # Loop to check if all llmstack-related pods are in the Running state
 while true; do
     # Get all pods containing "vllm" in their name and extract their STATUS column
-    pod_status=$(kubectl get pods -n "$NAMESPACE" --no-headers | grep "vllm" | awk '{print $3}' | sort | uniq)
-    pod_ready=$(kubectl get pods -n "$NAMESPACE" --no-headers | grep "vllm" | awk '{print $2}' | sort | uniq)
+    pod_status=$(kubectl get pods -n "$NAMESPACE" -o wide --no-headers | grep "vllm" | awk '{print $3}' | sort | uniq)
+    pod_ready=$(kubectl get pods -n "$NAMESPACE" -o wide --no-headers | grep "vllm" | awk '{print $2}' | sort | uniq)
 
+    echo "=== DEBUG: Pod status ==="
+    echo "$pod_status"
+    echo "=== END DEBUG ==="
+
+    echo "=== DEBUG: Pod ready ==="
+    echo "$pod_ready"
+    echo "=== END DEBUG ==="
     # If the only unique status is "Running", break the loop and continue
     if [[ "$pod_status" == "Running" ]] && [[ "$pod_ready" == "1/1" ]]; then
         echo "All llmstack pods are now Ready and in Running state."
