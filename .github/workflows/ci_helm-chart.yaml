@@ -98,6 +98,8 @@ jobs:
         run: |
           helm upgrade --install vllm-${{ matrix.test-name }} ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --create-namespace -n ${{ matrix.test-name }}
 
+      - name: Setup Kubectl
+        uses: azure/setup-kubectl@v4
 
       ## Validate
       - name: Validate
