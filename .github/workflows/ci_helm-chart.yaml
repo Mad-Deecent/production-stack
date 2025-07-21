@@ -69,7 +69,7 @@ jobs:
           - two-pods-minimal-example
           - multiple-models
       fail-fast: true
-      max-parallel: 2
+      max-parallel: 1
 
     steps:
       ## Setup environment
@@ -96,7 +96,8 @@ jobs:
       ## Install Helm Chart
       - name: Install Helm Chart
         run: |
-          helm upgrade --install vllm-${{ matrix.test-name }} ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --atomic --create-namespace -n ${{ matrix.test-name }}
+          helm upgrade --install vllm-${{ matrix.test-name }} ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --create-namespace -n ${{ matrix.test-name }}
+
 
       ## Validate
       - name: Validate
@@ -113,7 +114,7 @@ jobs:
       - name: Uninstall Helm Chart
         if: always()
         run: |
-          helm uninstall vllm-${{ matrix.test-name }} -n ${{ matrix.test-name }}
+          helm uninstall vllm-${{ matrix.test-name }} -n ${{ matrix.test-name }} || true
 
   lint:
     name: Lint
