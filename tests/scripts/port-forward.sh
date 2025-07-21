@@ -8,6 +8,11 @@ NAMESPACE=$2
 [ ! -d "output-$VAR" ] && mkdir "output-$VAR"
 chmod -R 777 "output-$VAR"
 
+# DEBUG: Show what pods actually exist
+echo "=== DEBUG: All pods in namespace $NAMESPACE ==="
+kubectl get pods -n "$NAMESPACE" -o wide
+echo "=== END DEBUG ==="
+
 # Print router logs
 POD_NAME=$(kubectl get pods -n "$NAMESPACE" --no-headers -o custom-columns=":metadata.name" | grep '^vllm-deployment-router')
 echo "Getting pod $POD_NAME"
