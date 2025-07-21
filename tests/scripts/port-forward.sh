@@ -14,7 +14,7 @@ kubectl get pods -n "$NAMESPACE" -o wide
 echo "=== END DEBUG ==="
 
 # Print router logs
-POD_NAME=$(kubectl get pods -n "$NAMESPACE" --no-headers -o custom-columns=":metadata.name" | grep '^router')
+POD_NAME=$(kubectl get pods -n "$NAMESPACE" --no-headers -o custom-columns=":metadata.name" | grep 'router')
 echo "Getting pod $POD_NAME"
 
 kubectl wait --for=condition=ready pod/"$POD_NAME" --timeout=120s
