@@ -17,8 +17,8 @@ echo "=== END DEBUG ==="
 POD_NAME=$(kubectl get pods -n "$NAMESPACE" --no-headers -o custom-columns=":metadata.name" | grep 'router')
 echo "Getting pod $POD_NAME"
 
-kubectl wait --for=condition=ready pod/"$POD_NAME" --timeout=120s
-kubectl logs -f "$POD_NAME" 2>&1 | tee "output-$VAR/router.log" &
+kubectl wait --for=condition=ready pod/"$POD_NAME" -n "$NAMESPACE" --timeout=120s
+kubectl logs -f "$POD_NAME" -n "$NAMESPACE" 2>&1 | tee "output-$VAR/router.log" &
 
 # Loop to check if all llmstack-related pods are in the Running state
 while true; do
