@@ -4,20 +4,16 @@ servingEngineSpec:
   modelSpec:
     - name: "opt125m"
       repository: "vllm/vllm-openai"
-      # tag: "latest"
-      tag: "v0.5.5"
+      tag: "latest"
       modelURL: "facebook/opt-125m"
 
       replicaCount: 1
 
       requestCPU: 6
       requestMemory: "16Gi"
-      requestGPU: 0
-      env:
-        - name: CUDA_VISIBLE_DEVICES
-          value: "-1"
+      requestGPU: 1
 
 routerSpec:
-  repository: "localhost:32000/git-act-router"
+  repository: "localhost:5000/git-act-router"
   imagePullPolicy: "IfNotPresent"
   enableRouter: true

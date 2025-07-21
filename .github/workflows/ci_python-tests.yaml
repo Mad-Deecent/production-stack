@@ -6,10 +6,9 @@ on:
     branches:
       - main
     paths:
-      - ".github/workflows/ci_python-tests.yml"
+      # - ".github/workflows/ci_python-tests.yml"
       - "**.py"
       - "pyproject.toml"
-  merge_group:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -39,12 +39,12 @@ jobs:
           cache-to: type=gha,mode=max
           file: docker/Dockerfile
           push: false
-          tags: localhost:32000/git-act-router
+          tags: localhost:5000/git-act-router
           outputs: type=docker,dest=image.tar
 
       - name: Load Image
         run: |
-          microk8s ctr image import image.tar
+          minikube image load localhost:5000/git-act-router
 
   test:
     name: Test
@@ -88,7 +88,6 @@ jobs:
       ## Install Helm Chart
       - name: Install Helm Chart
         run: |
-
           kubectl delete namespace ${{ matrix.test-name }} || true
           helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --create-namespace -n ${{ matrix.test-name }}
 
