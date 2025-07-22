@@ -33,25 +33,9 @@ jobs:
           driver-opts: |
             network=host
           buildkitd-config-inline: |
-            [registry."host.docker.internal:32000"]
+            [registry."localhost:32000"]
               http = true
               insecure = true
-
-      - name: Debug network connectivity
-        run: |
-          apt-get update
-          apt-get install -y dnsutils
-          echo "=== Network interfaces ==="
-          ip addr show
-          echo "=== DNS resolution ==="
-          nslookup host.docker.internal || echo "host.docker.internal not found"
-          echo "=== Direct host IP test ==="
-          # Get the actual host IP from the gateway
-          HOST_IP=$(ip route show default | awk '/default/ {print $3}')
-          echo "Host IP: $HOST_IP"
-          curl -v http://$HOST_IP:32000/v2/ || echo "Registry not accessible"
-          echo "=== Test localhost registry ==="
-          curl -v http://localhost:32000/v2/ || echo "Localhost registry not accessible"
 
       - name: Docker Build
         uses: docker/build-push-action@v6
@@ -64,8 +48,7 @@ jobs:
           cache-to: type=gha,mode=max
           file: docker/Dockerfile
           push: true
-          tags: host.docker.internal:32000/git-act-router
-
+          tags: localhost:32000/git-act-router
 
   test:
     name: Test
