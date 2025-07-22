@@ -39,6 +39,8 @@ jobs:
 
       - name: Debug network connectivity
         run: |
+          apt-get update
+          apt-get install -y dnsutils
           echo "=== Network interfaces ==="
           ip addr show
           echo "=== DNS resolution ==="
