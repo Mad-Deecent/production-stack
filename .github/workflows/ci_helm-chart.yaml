@@ -65,7 +65,9 @@ jobs:
           - two-pods-minimal-example
           - multiple-models
       fail-fast: false
-
+    env:
+      AGENT_TOOLSDIRECTORY: /opt/hostedtoolcache
+      RUNNER_TOOL_CACHE: /opt/hostedtoolcache
     steps:
       ## Setup environment
       - name: Checkout Repository
