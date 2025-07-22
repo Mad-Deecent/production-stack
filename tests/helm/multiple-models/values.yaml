@@ -26,6 +26,6 @@ servingEngineSpec:
         - ReadWriteOnce
 
 routerSpec:
-  repository: "localhost:5000/git-act-router"
+  repository: "localhost:32000/git-act-router"
   imagePullPolicy: "IfNotPresent"
   enableRouter: true

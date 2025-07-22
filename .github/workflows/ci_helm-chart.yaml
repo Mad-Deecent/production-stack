@@ -25,8 +25,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Docker Setup
+      # Setup buildx to push to microk8s registry
+      # https://docs.docker.com/build/ci/github-actions/configure-builder/#registry-mirror
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            network=host
+          buildkitd-config-inline: |
+            [registry."host.docker.internal:32000"]
+              http = true
+              insecure = true
 
       - name: Docker Build
         uses: docker/build-push-action@v6
@@ -38,13 +47,9 @@ jobs:
           cache-from: type=gha,mode=max
           cache-to: type=gha,mode=max
           file: docker/Dockerfile
-          push: false
-          tags: localhost:5000/git-act-router
-          outputs: type=docker,dest=image.tar
+          push: true
+          tags: host.docker.internal:32000/git-act-router
 
-      - name: Load Image
-        run: |
-          minikube image load localhost:5000/git-act-router
 
   test:
     name: Test
@@ -87,6 +92,7 @@ jobs:
       ## Install Helm Chart
       - name: Install Helm Chart
         run: |
+
           kubectl delete namespace ${{ matrix.test-name }} || true
           helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --create-namespace -n ${{ matrix.test-name }}
 

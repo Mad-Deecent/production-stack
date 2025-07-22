@@ -1,21 +1,19 @@
-name: Router E2E tests
+name: CI - Router E2E tests
+run-name: CI - Router E2E tests - ${{ github.actor }} - ${{ github.head_ref }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
 
 on:
-  push:
+  pull_request:
     branches:
       - main
     paths:
+      - ".github/workflows/router-e2e-test.yml"
       - "src/vllm_router/**"
       - "docker/**"
       - "pyproject.toml"
-      - ".github/**"
-  pull_request:
-    paths:
-      - "src/vllm_router/**"
-      - "docker/**"
-      - "pyproject.toml"
-      - ".github/**"
-  workflow_dispatch:
 
 jobs:
   e2e-test:

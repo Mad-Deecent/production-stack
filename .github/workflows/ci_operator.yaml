@@ -1,8 +1,8 @@
-name: Operator CRD and CR Testing
-run-name: ${{ github.actor }} is testing operator CRDs and CRs 🚀
+name: CI - Operator CRD and CR Testing
+run-name: CI - Operator CRD and CR Testing - ${{ github.actor }} - ${{ github.head_ref }}
 
 concurrency:
-  group: ${{ github.ref }}-crd
+  group: ${{ github.workflow }}-${{ github.head_ref }}
   cancel-in-progress: true
 
 on:
@@ -10,14 +10,14 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/operator-test.yml'
-      - 'operator/**'
-      - 'tests/e2e/**'
+      - ".github/workflows/ci_operator.yaml"
+      - "operator/**"
+      - "tests/e2e/**"
   pull_request:
     paths:
-      - '.github/workflows/operator-test.yml'
-      - 'operator/**'
-      - 'tests/e2e/**'
+      - ".github/workflows/ci_operator.yaml"
+      - "operator/**"
+      - "tests/e2e/**"
   merge_group:
 
 jobs:
