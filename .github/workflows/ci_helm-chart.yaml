@@ -34,9 +34,9 @@ jobs:
             network=host
           buildkitd-config-inline: |
             [registry."docker.io"]
-              mirrors = ["docker.io"]
+              mirrors = ["http://host.docker.internal:32000"]
             [registry."index.docker.io"]
-              mirrors = ["index.docker.io"]
+              mirrors = ["http://host.docker.internal:32000"]
             [registry."host.docker.internal:32000"]
               http = true
               insecure = true
