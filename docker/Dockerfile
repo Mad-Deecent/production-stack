@@ -13,7 +13,7 @@ COPY pyproject.toml .
 COPY .git/ .git/
 
 # Copy the rest of the application code
-COPY src/ src/
+COPY src/ .
 
 ARG INSTALL_OPTIONAL_DEP=semantic_cache,lmcache
 ENV INSTALL_OPTIONAL_DEP=${INSTALL_OPTIONAL_DEP}
@@ -26,7 +26,7 @@ RUN pip install --upgrade --no-cache-dir pip setuptools_scm && \
 FROM python:3.12-slim AS deploy
 WORKDIR /app
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
-COPY --from=builder /app/src/ /app/src/
+COPY --from=builder /src/ /app/src/
 
 # Set the entrypoint
 ENTRYPOINT ["vllm-router"]
