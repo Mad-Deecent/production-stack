@@ -60,8 +60,7 @@ jobs:
           - secure-minimal-example
           - two-pods-minimal-example
           - multiple-models
-      fail-fast: true
-      max-parallel: 1
+      fail-fast: false
 
     steps:
       ## Setup environment
