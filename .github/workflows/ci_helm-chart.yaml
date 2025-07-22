@@ -40,7 +40,7 @@ jobs:
       - name: Docker Build
         uses: docker/build-push-action@v6
         env:
-          DOCKER_BUILD_CHECKS_ANNOTATIONS: false
+          DOCKER_BUILD_SUMMARY: false
         with:
           context: .
           build-args: INSTALL_OPTIONAL_DEP=default
