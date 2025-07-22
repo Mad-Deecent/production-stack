@@ -77,16 +77,19 @@ jobs:
 
       - name: Helm Setup
         uses: azure/setup-helm@v4.3.0
-        
-      ## Install Helm Chart
-      - name: Install Helm Chart
-        run: |
 
-          kubectl delete namespace ${{ matrix.test-name }} || true
-          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --create-namespace -n ${{ matrix.test-name }}
 
       - name: Setup Kubectl
         uses: azure/setup-kubectl@v4
+
+      - name: Cleanup namespace
+        run: |
+          kubectl delete namespace ${{ matrix.test-name }} || true
+
+      ## Install Helm Chart
+      - name: Install Helm Chart
+        run: |
+          helm upgrade --install vllm ./helm -f tests/helm/${{ matrix.test-name }}/values.yaml --create-namespace -n ${{ matrix.test-name }}
 
       ## Validate
       - name: Validate
