@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY pyproject.toml .
 COPY .git/ .git/
 
 # Copy the rest of the application code
-COPY src/ .
+COPY src/ src/
 
 ARG INSTALL_OPTIONAL_DEP=semantic_cache,lmcache
 ENV INSTALL_OPTIONAL_DEP=${INSTALL_OPTIONAL_DEP}
