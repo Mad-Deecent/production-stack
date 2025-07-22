@@ -27,7 +27,7 @@ RUN pip install --upgrade --no-cache-dir pip setuptools_scm && \
 FROM python:${PYTHON_VERSION}-slim AS deploy
 WORKDIR /app
 COPY --from=builder /usr/local/lib/python${PYTHON_VERSION}/site-packages /usr/local/lib/python${PYTHON_VERSION}/site-packages
-COPY src/vllm-router /app/src/vllm-router
+COPY src/vllm_router /app/src/vllm_router
 
 # Set the entrypoint
 ENTRYPOINT ["vllm-router"]
