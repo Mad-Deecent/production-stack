@@ -1,19 +1,14 @@
-name: CI
+name: CI - Python Tests
+run-name: CI - Python Tests - ${{ github.actor }} - ${{ github.ref }}
 
 on:
-  push:
+  pull_request:
     branches:
       - main
     paths:
-      - '.github/workflows/**'
-      - '**.py'
-      - 'pyproject.toml'
-  pull_request:
-    paths:
-        - '.github/workflows/**'
-        - '**.py'
-        - 'pyproject.toml'
-  merge_group:
+      - ".github/workflows/ci_python-tests.yaml"
+      - "*.py"
+      - "pyproject.toml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -37,4 +32,5 @@ jobs:
         run: uv sync --all-extras --all-groups
 
       - name: Run Tests
+        id: tests
         run: uv run pytest

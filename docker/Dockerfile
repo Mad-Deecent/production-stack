@@ -1,4 +1,5 @@
-FROM python:3.12-slim
+ARG PYTHON_VERSION=3.12
+FROM python:${PYTHON_VERSION}-slim AS builder
 
 WORKDIR /app
 
@@ -21,6 +22,13 @@ ENV INSTALL_OPTIONAL_DEP=${INSTALL_OPTIONAL_DEP}
 # Install dependencies (use cache, and delete after install, to speed up the build)
 RUN pip install --upgrade --no-cache-dir pip setuptools_scm && \
     pip install --no-cache-dir .[$INSTALL_OPTIONAL_DEP]
+
+
+FROM python:${PYTHON_VERSION}-slim AS deploy
+ARG PYTHON_VERSION
+WORKDIR /app
+COPY --from=builder /usr/local/lib/python${PYTHON_VERSION}/site-packages /usr/local/lib/python${PYTHON_VERSION}/site-packages
+COPY src/vllm_router /app/src/vllm_router
 
 # Set the entrypoint
 ENTRYPOINT ["vllm-router"]

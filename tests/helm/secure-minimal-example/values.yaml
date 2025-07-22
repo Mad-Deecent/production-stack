@@ -9,8 +9,8 @@ servingEngineSpec:
 
       replicaCount: 1
 
-      requestCPU: 6
-      requestMemory: "16Gi"
+      requestCPU: 2
+      requestMemory: "4Gi"
       requestGPU: 1
 
 routerSpec:
