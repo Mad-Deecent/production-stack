@@ -1,9 +1,9 @@
 name: CI - Helm Functionality
 run-name: CI - Helm Functionality - ${{ github.actor }} - ${{ github.head_ref }}
 
-# concurrency:
-#   group: ${{ github.workflow }}-${{ github.head_ref }}
-#   cancel-in-progress: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
 
 on:
   pull_request:
@@ -77,19 +77,7 @@ jobs:
 
       - name: Helm Setup
         uses: azure/setup-helm@v4.3.0
-
-      - name: Setup Python
-        id: setup-python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: "pip"
-
-      - name: Install Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install openai
-
+        
       ## Install Helm Chart
       - name: Install Helm Chart
         run: |

@@ -17,6 +17,11 @@ microk8s enable registry
 micro8s enable ingress
 ```
 
+## Required libs
+
+- Python 3.12+
+- OpenAI pip lib (`pip install openai`)
+
 This will install a single node microk8s cluster, install the nvidia-operator, and enable a docker registry on the host.
 
 # Self-Hosted Runners
