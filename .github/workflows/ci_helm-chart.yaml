@@ -33,6 +33,13 @@ jobs:
           driver-opts: |
             network=host
           buildkitd-config-inline: |
+            [registry."docker.io"]
+              mirrors = ["docker.io"]
+            [registry."index.docker.io"]
+              mirrors = ["index.docker.io"]
+            [registry."host.docker.internal:32000"]
+              http = true
+              insecure = true
             [registry."localhost:32000"]
               http = true
               insecure = true
