@@ -1,9 +1,9 @@
 name: CI - Helm Functionality
 run-name: CI - Helm Functionality - ${{ github.actor }} - ${{ github.head_ref }}
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref }}
-  cancel-in-progress: false
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.head_ref }}
+#   cancel-in-progress: true
 
 on:
   pull_request:
