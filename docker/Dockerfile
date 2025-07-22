@@ -22,6 +22,12 @@ ENV INSTALL_OPTIONAL_DEP=${INSTALL_OPTIONAL_DEP}
 RUN pip install --upgrade --no-cache-dir pip setuptools_scm && \
     pip install --no-cache-dir .[$INSTALL_OPTIONAL_DEP]
 
+
+FROM python:3.12-slim AS deploy
+WORKDIR /app
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder /app/src/ /app/src/
+
 # Set the entrypoint
 ENTRYPOINT ["vllm-router"]
 CMD []
