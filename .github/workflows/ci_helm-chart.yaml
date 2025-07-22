@@ -78,7 +78,6 @@ jobs:
       - name: Helm Setup
         uses: azure/setup-helm@v4.3.0
 
-
       - name: Setup Kubectl
         uses: azure/setup-kubectl@v4
 

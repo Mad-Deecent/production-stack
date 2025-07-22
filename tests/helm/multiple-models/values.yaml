@@ -3,11 +3,11 @@ servingEngineSpec:
   modelSpec:
     - name: "opt125m"
       repository: "vllm/vllm-openai"
-      tag: "latest"`
+      tag: "latest"
       modelURL: "facebook/opt-125m"
       replicaCount: 1
-      requestCPU: 6
-      requestMemory: "16Gi"
+      requestCPU: 2
+      requestMemory: "4Gi"
       requestGPU: 1
       pvcStorage: "10Gi"
       pvcAccessMode:
@@ -18,8 +18,8 @@ servingEngineSpec:
       tag: "latest"
       modelURL: "HuggingFaceTB/SmolLM2-135M-Instruct"
       replicaCount: 1
-      requestCPU: 6
-      requestMemory: "16Gi"
+      requestCPU: 2
+      requestMemory: "4Gi"
       requestGPU: 1
       pvcStorage: "10Gi"
       pvcAccessMode:

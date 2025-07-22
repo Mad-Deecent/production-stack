@@ -9,11 +9,11 @@ servingEngineSpec:
 
       replicaCount: 1
 
-      requestCPU: 6
-      requestMemory: "16Gi"
+      requestCPU: 2
+      requestMemory: "4Gi"
       requestGPU: 1
 
 routerSpec:
-  repository: "localhost:32000/git-act-router"
+  repository: "localhost:5000/git-act-router"
   imagePullPolicy: "IfNotPresent"
   enableRouter: true
